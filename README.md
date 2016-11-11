@@ -1,9 +1,13 @@
 # Data Wrangling with Python and SQL
 ### openStreetMap project
 
-The following is an attempt at wrangling the Open Street Map of Chennai region in the Indian state of Tamil Nadu, which is the city in which I spent several years of my graduate studies.
+The following is an attempt at wrangling the Open Street Map of Warsaw, Poland, as I lived there during my study years, and I know it rather well.
 
-The data, downloaded from the website of the [Map Zen](https://mapzen.com/data/metro-extracts/metro/chennai_india/) project, weighs 407,668,743 bytes before commencement of wrangling.
+The data was downloaded from the website of the [Map Zen](https://mapzen.com/data/metro-extracts/metro/warsaw_poland/) project.
 
-## There were problems
+## Introductory exploration of data
+
+After running the data.py function on the XML file and taking a look at the output, I noticed a confusing field referring to the cities, namely 'city:simc', containing a number. As I was not acquainted with it (it was different from postal number), I found out it refers to territorial classification of Poland, TERYT. The government statistical portal of Poland contained [an XML file](http://www.stat.gov.pl/broker/access/prefile/listPreFiles.jspa) of all SIMC numbers of Polish cities. In further exploration I will run a function to check if the SIMC numbers are valid, according to the government classification.
+
+
 

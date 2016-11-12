@@ -5,7 +5,15 @@ The following is an attempt at wrangling the Open Street Map of Warsaw, Poland, 
 
 The data was downloaded from the website of the [Map Zen](https://mapzen.com/data/metro-extracts/metro/warsaw_poland/) project.
 
-## Introductory exploration of data
+## Problems encountered in the data
+
+Running the data.py function on the OSM file for Warsaw indicated the following problems:
+
+- 'city.simc' field in the data, which had ambiguous meaning
+- The datafile contains material relating to several cities in the vicinity of Warsaw; I would like to know, if I can get info on: users who contributed only to the map of Warsaw, and: street and geographic locations referring only to Warsaw
+- The 'source' field in node tags seems to refer to data scraped from city councils. I would like to know, if every city in the map has data obtained from its respective council.
+
+## The SIMC number
 
 After running the data.py function on the XML file and taking a look at the output, I noticed a confusing field referring to the cities, namely 'city:simc', containing a number:
 
@@ -49,9 +57,11 @@ with codecs.open(outputs, 'w') as f:
 ```
 
 
+## Street names
 
 As I explored street names, I was quite surprised to find no major mistakes or abbreviations. It might have been caused by the convention used in Polish edition of the OSM, where there is no equivalent of the 'Street' noun used by the street names (in Polish, it is put before the name of the street, and conventionally abbreviated to 'Ul.').
 
+## Numerous cities
 
 
 ## Sources used in this project

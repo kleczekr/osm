@@ -29,3 +29,4 @@ As I explored street names, I was quite surprised to find no major mistakes or a
 - [StackOverflow post on converting XML to CSV](http://stackoverflow.com/questions/31844713/python-convert-xml-to-csv-file)
 - [SQLite documentation on importing CSV files](https://www.sqlite.org/cvstrac/wiki?p=ImportingFiles)
 - [ElementTree documentation](https://docs.python.org/2/library/xml.etree.elementtree.html)
+- [Python CSV module documentation](https://docs.python.org/2/library/csv.html)

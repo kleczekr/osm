@@ -55,7 +55,17 @@ with codecs.open(outputs, 'w') as f:
                     sympod = element.text
             writer.writerow((name, sym, sympod))
 ```
+This outputs a 'simc.csv' file, which I then imported into SQL with this adapted call:
 
+```SQL
+CREATE TABLE simc (
+    name TEXT NOT NULL,
+    sym INTEGER NOT NULL,
+    sympod INTEGER NOT NULL
+);
+```
+
+I used the [data wrangling schema](https://gist.github.com/swwelch/f1144229848b407e0a5d13fcb7fbbd6f) provided by Udacity team to import into SQL the other .csv files.
 
 ## Street names
 

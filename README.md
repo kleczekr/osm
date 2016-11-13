@@ -10,8 +10,8 @@ The data was downloaded from the website of the [Map Zen](https://mapzen.com/dat
 Running the data.py function on the OSM file for Warsaw indicated the following problems:
 
 - 'city.simc' field in the data, which had ambiguous meaning
-- Many street names have numbers in them. I would like to check these, and see, if something should be done about these.
-- The datafile contains material relating to several cities in the vicinity of Warsaw; I would like to know, if I can get info on: users who contributed only to the map of Warsaw, and: street and geographic locations referring only to Warsaw
+- Some street names have numbers in them. I would like to check these, and see, if something should be done about these.
+- Some postal codes contained in the file seem to belong to cities from different administrative districts.
 - Some of the fields have input in non-Latin scripts (predominantly Russian, but also some Asian scripts which I have not yet identified). I would like to see these, and check, whether something should be done about these (providing transliteration etc.).
 
 ## The SIMC number
@@ -70,7 +70,7 @@ I used the [data wrangling schema](https://gist.github.com/swwelch/f1144229848b4
 
 ## Street names
 
-As I explored street names, I was quite surprised to find no major mistakes or abbreviations. It might have been caused by the convention used in Polish edition of the OSM, where there is no equivalent of the 'Street' noun used by the street names (in Polish, it is put before the name of the street, and conventionally abbreviated to 'Ul.').
+As I explored street names, I was quite surprised to find no major mistakes or abbreviations. It might have been caused by the convention used in Polish edition of the OSM, where there is no equivalent of the 'Street' noun used by the street names (in Polish, it is put before the name of the street, and conventionally abbreviated to 'Ul.'). In some names, there is the abbreviation 'im.' from the word 'imienia' ('named after'), but I chose not to alter it, as it is used consistently.
 
 ## Numerous cities
 

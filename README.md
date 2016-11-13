@@ -10,8 +10,9 @@ The data was downloaded from the website of the [Map Zen](https://mapzen.com/dat
 Running the data.py function on the OSM file for Warsaw indicated the following problems:
 
 - 'city.simc' field in the data, which had ambiguous meaning
+- Many street names have numbers in them. I would like to check these, and see, if something should be done about these.
 - The datafile contains material relating to several cities in the vicinity of Warsaw; I would like to know, if I can get info on: users who contributed only to the map of Warsaw, and: street and geographic locations referring only to Warsaw
-- The 'source' field in node tags seems to refer to data scraped from city councils. I would like to know, if every city in the map has data obtained from its respective council.
+- Some of the fields have input in non-Latin scripts (predominantly Russian, but also some Asian scripts which I have not yet identified). I would like to see these, and check, whether something should be done about these (providing transliteration etc.).
 
 ## The SIMC number
 
@@ -73,10 +74,30 @@ As I explored street names, I was quite surprised to find no major mistakes or a
 
 ## Numerous cities
 
+## Non-Latin characters in the map
+
+As I mentioned, I discovered, that there are fields in the data containing non-Latin characters, predominantly Russian. As I have been looking for ways of finding these fields, I came upon a [StackOverflow post](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters) containing code for checking string for non-Latin characters. Below is the code I adapted for checking the map data:
+
+```python
+import unicodedata as ud
+
+latin_letters= {}
+
+def is_latin(uchr):
+    try: return latin_letters[uchr]
+    except KeyError:
+         return latin_letters.setdefault(uchr, 'LATIN' in ud.name(uchr))
+
+def only_roman_chars(unistr):
+    return all(is_latin(uchr)
+           for uchr in unistr
+           if uchr.isalpha())
+```
 
 ## Sources used in this project
 - [StackOverflow post on converting Unicode](http://stackoverflow.com/questions/13485546/converting-unicode-to-in-python)
 - [StackOverflow post on converting XML to CSV](http://stackoverflow.com/questions/31844713/python-convert-xml-to-csv-file)
+- [StackOverflow post on checking a string for non-Latin characters](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters)
 - [SQLite documentation on importing CSV files](https://www.sqlite.org/cvstrac/wiki?p=ImportingFiles)
 - [ElementTree documentation](https://docs.python.org/2/library/xml.etree.elementtree.html)
 - [Python CSV module documentation](https://docs.python.org/2/library/csv.html)

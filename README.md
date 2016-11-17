@@ -10,7 +10,7 @@ The data was downloaded from the website of the [Map Zen](https://mapzen.com/dat
 Running the data.py function on the OSM file for Warsaw indicated the following problems:
 
 - 'city.simc' field in the data, which had ambiguous meaning
-- Some street names have numbers in them. I would like to check these, and see, if something should be done about these.
+- Some street names have numbers in them. I would like to check these, and see, if something should be done about them.
 - Some postal codes contained in the file seem to belong to cities from different administrative districts.
 - Some of the fields have input in non-Latin scripts (predominantly Russian, but also some Asian scripts which I have not yet identified). I would like to see these, and check, whether something should be done about these (providing transliteration etc.).
 
@@ -101,6 +101,64 @@ As indicated by the [Wikipedia page devoted to 'Wesoła'](https://en.wikipedia.o
 
 As I explored street names, I was quite surprised to find no major mistakes or abbreviations. It might have been caused by the convention used in Polish edition of the OSM, where there is no equivalent of the 'Street' noun used by the street names (in Polish, it is put before the name of the street, and conventionally abbreviated to 'Ul.'). In some names, there is the abbreviation 'im.' from the word 'imienia' ('named after'), but I chose not to alter it, as it is used consistently.
 
+I did notice, though, that some streets have numbers in them. I ran a Python script on the ways_tags.csv to output all the street names containing numbers:
+
+```python
+import csv
+
+def numbers(s):
+    return any(i.isdigit() for i in s) # The function finding numbers in strings is taken from SO
+
+with open('ways_tags.csv') as f:
+    reader = csv.DictReader(f)
+    new_set = set()
+    for row in reader:
+        if row['key'] == 'street' and numbers(row['value']):
+            new_set.add(row['value'])
+    for value in new_set:
+        print unicode(value, 'utf-8').encode('utf-8')
+```
+
+The function prints values containing number in them. Majority of the values are acceptable, as the numbers are part of the street names, e.g. '6 Pułku Piechoty' or '1863 Roku'. In some cases the use of numbers seems misleading: 'Powstańców Warszawy 19', 'Powstańców Warszawy 17', 'Karczewska 14/16', 'Ireny Kosmowskiej - Grodzieńska 21/29'. I ran a simple script counting occurences of the above in the entire map:
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import csv
+
+import sys    # sys.setdefaultencoding is cancelled by site.py
+reload(sys)    # to re-enable sys.setdefaultencoding()
+sys.setdefaultencoding('utf-8')
+
+strange_names = [unicode('Powstańców Warszawy 19', 'utf-8').encode('utf-8'), unicode('Powstańców Warszawy 17', 'utf-8').encode('utf-8'), unicode('Karczewska 14/16', 'utf-8').encode('utf-8'), unicode('Ireny Kosmowskiej - Grodzieńska 21/29', 'utf-8').encode('utf-8')]
+
+with open('ways_tags.csv') as f:
+    strange_names_dict = {unicode('Powstańców Warszawy 19', 'utf-8').encode('utf-8'): 0,
+    unicode('Powstańców Warszawy 17', 'utf-8').encode('utf-8'): 0,
+    unicode('Karczewska 14/16', 'utf-8').encode('utf-8'): 0,
+    unicode('Ireny Kosmowskiej - Grodzieńska 21/29', 'utf-8').encode('utf-8'): 0}
+
+    reader = csv.DictReader(f)
+    
+    for row in reader:
+        name = row['value']
+        if row['key'] == 'street' and name in strange_names:
+            strange_names_dict[name] += 1
+    print strange_names_dict
+```
+
+In spite of all my pains, the output is still not displaying unicode characters. Anyway, it looks like that:
+
+```python
+{'Powsta\xc5\x84c\xc3\xb3w Warszawy 17': 1,
+'Karczewska 14/16': 1,
+'Ireny Kosmowskiej - Grodzie\xc5\x84ska 21/29': 1,
+'Powsta\xc5\x84c\xc3\xb3w Warszawy 19': 1}
+```
+
+And indicates, that each of the problematic names occurs only once in the entire map. As the above names do not denote street names, but entire addresses, they can be removed from the map.
+
+
 ## Numerous cities
 
 ## Non-Latin characters in the map
@@ -127,6 +185,7 @@ def only_roman_chars(unistr):
 - [StackOverflow post on converting Unicode](http://stackoverflow.com/questions/13485546/converting-unicode-to-in-python)
 - [StackOverflow post on converting XML to CSV](http://stackoverflow.com/questions/31844713/python-convert-xml-to-csv-file)
 - [StackOverflow post on checking a string for non-Latin characters](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters)
+- [StackOverflow AlKid's solution to the function finding numbers in strings](http://stackoverflow.com/questions/19859282/check-if-a-string-contains-a-number)
 - [SQLite documentation on importing CSV files](https://www.sqlite.org/cvstrac/wiki?p=ImportingFiles)
 - [ElementTree documentation](https://docs.python.org/2/library/xml.etree.elementtree.html)
 - [Python CSV module documentation](https://docs.python.org/2/library/csv.html)

@@ -189,7 +189,13 @@ After a while of searching for details online, I established, that postcodes beg
 As I mentioned, I discovered, that there are fields in the data containing non-Latin characters, predominantly Russian. As I have been looking for ways of finding these fields, I came upon a [StackOverflow post](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters) containing code for checking string for non-Latin characters. Below is the code I adapted for checking the map data:
 
 ```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import unicodedata as ud
+import csv
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 latin_letters= {}
 
@@ -202,7 +208,135 @@ def only_roman_chars(unistr):
     return all(is_latin(uchr)
            for uchr in unistr
            if uchr.isalpha())
+
+with open('ways_tags.csv') as f:
+    reader = csv.DictReader(f)
+    not_romans = set()
+    count = 0
+    for row in reader:
+        for field in row.values():
+            if not only_roman_chars(unicode(field, 'utf-8')):
+                not_romans.add(field)
+    for stuff in not_romans:
+        print unicode(stuff, 'utf-8')
 ```
+
+As the output indicates, majority of the fields writen in non-Latin scripts are written in either Russian, or Ukrainian:
+
+```python
+ヴィスワ
+Президентский дворец в Варшаве
+Міст Понятовського
+Варшавская школа экономики
+Посольство України
+ארקדיה
+Варшавський фінансовий центр
+Заходні Буг
+Пляц Банковий
+Варшавська політехніка
+Колонна короля Сигизмунда в Варшаве
+جامعة وارسو
+주 폴란드 대한민국 대사관
+11-го Листопада
+Повонзківський цвинтар
+Посольство России в Польше
+Марії Склодовської-Кюрі вулиця
+Висла
+Музей охоты и верховой езды
+Статуя Сиренки
+Варшавский университет
+Бельведерский дворец в Варшаве
+Посольство Республики Узбекистан
+Юля 8560
+Новогеоргиевская крепость
+Церковь Успения Божией Матери и Святого Иосифа
+аллея Солидарности
+памятник Яну Килиницкому
+Костел святого Мартина
+Франкліна Рузвельта
+קניון עודפים( אוטובוס 517 מתחנה מרכזית )
+стоянка
+улица Адама Мицкевича
+ポーランド日本情報工科大学
+ночлег
+Международный Аэропорт имени Фредерика Шопена
+워크리브트레블 민박
+Алея «Солідарності»
+Дорина
+Тадеуша Сиґетинського
+Центральный Железнодорожный Вокзал
+在ポーランド日本国大使館
+Західний Буг
+Центральний статистичний офіс Польщі
+Западный Буг
+Варшавский политехнический институт
+Нараў
+розборка пежо
+Палац Красінських
+Вісла
+Кафедральний собор Івана Хрестителя
+Європейська площа
+Варшавське наукове товариство
+Варшава АС Восточная
+Буг
+Піонерська вулиця
+נמל התעופה ורשה פרדריק שופן
+부크
+```
+This might not be a problem, since the list is not very long. We can take a look at how often these names are used. The following prints the names which occur more than five times:
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import unicodedata as ud
+import csv
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+latin_letters = {}
+
+
+def is_latin(uchr):
+    try: return latin_letters[uchr]
+    except KeyError:
+         return latin_letters.setdefault(uchr, 'LATIN' in ud.name(uchr))
+
+def only_roman_chars(unistr):
+    return all(is_latin(uchr)
+           for uchr in unistr
+           if uchr.isalpha())
+
+
+
+with open('ways_tags.csv') as f:
+    reader = csv.DictReader(f)
+    not_romans = {}
+    count = 0
+    for row in reader:
+        for field in row.values():
+            if not only_roman_chars(unicode(field, 'utf-8')):
+                if field in not_romans.keys():
+                    not_romans[field] += 1
+                else:
+                    not_romans[field] = 1
+    for item in not_romans.keys():
+        if not_romans[item] > 5:
+            print item + ': ' + str(not_romans[item])
+```
+
+The above code might look a little strange, as I needed to use a workaround in order to display unicode strings properly. The output is as follows:
+
+```python
+ヴィスワ: 9
+Пляц Банковий: 10
+Марії Склодовської-Кюрі вулиця: 18
+Висла: 13
+аллея Солидарности: 84
+улица Адама Мицкевича: 33
+```
+
+The most common non-Latin script names are Russian names of streets and places ('аллея Солидарности', 'улица Адама Мицкевича', 'Пляц Банковий', 'Висла'). There is also an Ukrainian name of a street ('Марії Склодовської-Кюрі вулиця') and, surprisingly, a Japanese name of the river Wisła ('ヴィスワ'). These could be changed to Polish names with relative ease, but care should be taken, in case these were included in the map for the convenience of foreign speakers.
 
 ## Sources used in this project
 - [StackOverflow post on converting Unicode](http://stackoverflow.com/questions/13485546/converting-unicode-to-in-python)

@@ -14,6 +14,8 @@ Running the data.py function on the OSM file for Warsaw indicated the following 
 - Some postal codes contained in the file seem to belong to cities from different administrative districts.
 - Some of the fields have input in non-Latin scripts (predominantly Russian, but also some Asian scripts which I have not yet identified). I would like to see these, and check, whether something should be done about these (providing transliteration etc.).
 
+I take a closer look at these problems in phase 2 of the project, after introductory description of the dataset.
+
 ## Phase 1: description of the dataset
 
 ### Size of files containing data:
@@ -602,6 +604,37 @@ meeting_point|1
 office|1
 zoo|1
 ```
+
+### Architecture
+
+```SQL
+SELECT value, COUNT(*) AS n FROM ways_tags WHERE key = 'architecture' GROUP BY value ORDER BY n DESC;
+```
+
+```SQL
+baroque|5
+classic|1
+```
+
+### Advertising
+
+```SQL
+SELECT value, COUNT(*) AS n FROM ways_tags WHERE key = 'advertising' GROUP BY value ORDER BY n DESC;
+```
+
+```SQL
+billboard|7
+column|3
+```
+
+## Phase 4: Ideas for further work
+
+I was greatly impressed with the map of Warsaw. It is obvious that the map was meticulously edited by hundreds of people, and I cannot pinpoint any blunders in it, other than the few issues I mentioned in the map cleaning phase. I undertook the work on the map of Warsaw and its surrounding towns after an unsuccessful attempt at working with the map of Chennai, India, which is another city in which I studies for a longer period of time. There is much qualitative difference between these two datasets. While it might be unjust to compare them, as Chennai is much larger city than Warsaw, the map of Warsaw seems like much more of an accomplished project, with its details carefully arranged.
+
+With that in mind, I see a few areas in which the map could be further developed. I was greatly intrigued discovering the 'architecture' and 'advertising' keys in the dataset, and badly disappointed after discovering, that there is barely any information contained in these keys. It is likely, that individuals living in Warsaw, and interested in researching these subjects (and I know a few concerned with anthropology of a city) could take upon themselves supplementing some of the lacking information.
+
+## Conclusion
+
 
 
 ### Sources used in this project

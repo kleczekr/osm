@@ -144,16 +144,18 @@ with open('ways_tags.csv') as f:
         name = row['value']
         if row['key'] == 'street' and name in strange_names:
             strange_names_dict[name] += 1
-    print strange_names_dict
+
+    for key in strange_names_dict.keys():
+        print key + ': ' + str(strange_names_dict[key])
 ```
 
-In spite of all my pains, the output is still not displaying unicode characters. Anyway, it looks like that:
+The loop at the end is included in order to display the Unicode characters properly. The output is as follows:
 
 ```python
-{'Powsta\xc5\x84c\xc3\xb3w Warszawy 17': 1,
-'Karczewska 14/16': 1,
-'Ireny Kosmowskiej - Grodzie\xc5\x84ska 21/29': 1,
-'Powsta\xc5\x84c\xc3\xb3w Warszawy 19': 1}
+Powstańców Warszawy 17: 1
+Karczewska 14/16: 1
+Ireny Kosmowskiej - Grodzieńska 21/29: 1
+Powstańców Warszawy 19: 1
 ```
 
 And indicates, that each of the problematic names occurs only once in the entire map. As the above names do not denote street names, but entire addresses, they can be removed from the map.

@@ -14,7 +14,12 @@ Running the data.py function on the OSM file for Warsaw indicated the following 
 - Some postal codes contained in the file seem to belong to cities from different administrative districts.
 - Some of the fields have input in non-Latin scripts (predominantly Russian, but also some Asian scripts which I have not yet identified). I would like to see these, and check, whether something should be done about these (providing transliteration etc.).
 
-## The SIMC number
+## Phase 1: description of the dataset
+
+
+## Phase 2: auditing and cleaning the dataset
+
+### The SIMC number
 
 After running the data.py function on the XML file and taking a look at the output, I noticed a confusing field referring to the cities, namely 'city:simc', containing a number:
 
@@ -97,7 +102,7 @@ This output only one line:
 
 As indicated by the [Wikipedia page devoted to 'Wesoła'](https://en.wikipedia.org/wiki/Wesoła), the place is now considered to be part of Warsaw, but was an independent town prior to 2002. This clarifies, why the government file lists the SIMC number of Wesoła as referring to Warsaw, while the OSM map lists it as an independent entity.
 
-## Street names
+### Street names
 
 As I explored street names, I was quite surprised to find no major mistakes or abbreviations. It might have been caused by the convention used in Polish edition of the OSM, where there is no equivalent of the 'Street' noun used by the street names (in Polish, it is put before the name of the street, and conventionally abbreviated to 'Ul.'). In some names, there is the abbreviation 'im.' from the word 'imienia' ('named after'), but I chose not to alter it, as it is used consistently.
 
@@ -161,7 +166,7 @@ Powstańców Warszawy 19: 1
 And indicates, that each of the problematic names occurs only once in the entire map. As the above names do not denote street names, but entire addresses, they can be removed from the map.
 
 
-## Postal codes
+### Postal codes
 
 Postal codes in Mazovian district, in which Warsaw is located, begin with 0. As I noticed, that some of the numbers in abbreviated files deviate from this pattern, I decided to run a script finding the deviant postal codes:
 
@@ -186,7 +191,7 @@ set(['96-314', '96-315', '96-316', '96-300', '91-065', '26-914', '96-313', '96-1
 
 After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district, and should be corrected.
 
-## Non-Latin characters in the map
+### Non-Latin characters in the map
 
 As I mentioned, I discovered, that there are fields in the data containing non-Latin characters, predominantly Russian. As I have been looking for ways of finding these fields, I came upon a [StackOverflow post](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters) containing code for checking string for non-Latin characters. Below is the code I adapted for checking the map data:
 
@@ -340,7 +345,7 @@ The above code might look a little strange, as I needed to use a workaround in o
 
 The most common non-Latin script names are Russian names of streets and places ('аллея Солидарности', 'улица Адама Мицкевича', 'Пляц Банковий', 'Висла'). There is also an Ukrainian name of a street ('Марії Склодовської-Кюрі вулиця') and, surprisingly, a Japanese name of the river Wisła ('ヴィスワ'). These could be changed to Polish names with relative ease, but care should be taken, in case these were included in the map for the convenience of foreign speakers.
 
-## Sources used in this project
+### Sources used in this project
 - [StackOverflow post on converting Unicode](http://stackoverflow.com/questions/13485546/converting-unicode-to-in-python)
 - [StackOverflow post on converting XML to CSV](http://stackoverflow.com/questions/31844713/python-convert-xml-to-csv-file)
 - [StackOverflow post on checking a string for non-Latin characters](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters)

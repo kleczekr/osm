@@ -40,7 +40,8 @@ SELECT COUNT(DISTINCT(uid)) FROM ways;
 ```
 1772
 ```SQL
-SELECT COUNT(DISTINCT(e.uid)) FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM WAYS) e;
+SELECT COUNT(DISTINCT(e.uid))
+FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM WAYS) e;
 ```
 (The above code was taken from the 'sample submission' file, linked to in the Udacity material)
 
@@ -49,7 +50,11 @@ SELECT COUNT(DISTINCT(e.uid)) FROM (SELECT uid FROM nodes UNION ALL SELECT uid F
 ### 20 major contributors:
 
 ```SQL
-SELECT e.user, COUNT(*) as num FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e GROUP BY e.user ORDER BY num DESC LIMIT 20;
+SELECT e.user, COUNT(*) as num
+FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
+GROUP BY e.user
+ORDER BY num DESC
+LIMIT 20;
 ```
 (The above code was taken from the 'sample submission' file, linked to in the Udacity material)
 
@@ -75,6 +80,100 @@ wajak|68088
 michal_f|63063
 mpd_cbm|46048
 ```
+
+### Number of nodes and ways
+
+```SQL
+SELECT COUNT(DISTINCT(id)) FROM nodes;
+```
+4433235
+
+```SQL
+SELECT COUNT(DISTINCT(id)) FROM ways;
+```
+589328
+
+### Number of most common node and way keys:
+
+```SQL
+SELECT key, COUNT(*) AS n
+FROM nodes_tags
+GROUP BY key
+ORDER BY n DESC
+LIMIT 20;
+```
+
+```SQL
+housenumber|401708
+street|336792
+city|335089
+postcode|334573
+addr|256926
+city:simc|184749
+source|171247
+street:sym_ul|134332
+place|69748
+highway|31554
+name|27763
+ref|14469
+amenity|14106
+barrier|11497
+natural|11399
+power|9917
+type|8201
+emergency|8016
+created_by|7621
+public_transport|7401
+```
+
+```SQL
+SELECT key, COUNT(*) AS n
+FROM ways_tags
+GROUP BY key
+ORDER BY n DESC
+LIMIT 20;
+```
+
+```SQL
+building|311286
+highway|167694
+housenumber|125745
+city|124428
+street|123576
+postcode|118218
+addr|104185
+city:simc|90981
+street:sym_ul|87576
+name|65416
+landuse|47407
+source|40051
+surface|36187
+maxspeed|23776
+oneway|21533
+lanes|16069
+service|14573
+barrier|13549
+ref|12865
+amenity|12129
+```
+
+### Number of cafes, cinemas, and bars
+
+```SQL
+sqlite> SELECT value, COUNT(*) AS n FROM nodes_tags WHERE value = 'cafe' GROUP BY value; 
+```
+487
+
+```SQL
+sqlite> SELECT value, COUNT(*) AS n FROM nodes_tags WHERE value = 'cinema' GROUP BY value;
+```
+36
+
+```SQL
+sqlite> SELECT value, COUNT(*) AS n FROM nodes_tags WHERE value = 'bar' GROUP BY value;
+```
+138
+
 
 ## Phase 2: auditing and cleaning the dataset
 

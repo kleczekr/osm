@@ -1,0 +1,11 @@
+### Sources used in this project
+- [StackOverflow post on converting Unicode](http://stackoverflow.com/questions/13485546/converting-unicode-to-in-python)
+- [StackOverflow post on converting XML to CSV](http://stackoverflow.com/questions/31844713/python-convert-xml-to-csv-file)
+- [StackOverflow post on checking a string for non-Latin characters](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters)
+- [StackOverflow AlKid's solution to the function finding numbers in strings](http://stackoverflow.com/questions/19859282/check-if-a-string-contains-a-number)
+- [SQLite documentation on importing CSV files](https://www.sqlite.org/cvstrac/wiki?p=ImportingFiles)
+- [ElementTree documentation](https://docs.python.org/2/library/xml.etree.elementtree.html)
+- [Python CSV module documentation](https://docs.python.org/2/library/csv.html)
+- [Wikipedia article on postal codes in Poland](https://en.wikipedia.org/wiki/Postal_codes_in_Poland)
+- [Online search engine for postal codes in Poland](http://kody.jzk.pl/)
+- [The excellent sample project, linked up in the course pages, was my constant source of inspiration](https://gist.github.com/carlward/54ec1c91b62a5f911c42#file-sample_project-md)

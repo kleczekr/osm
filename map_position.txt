@@ -1,0 +1,5 @@
+The data used in the project was downloaded from the Map Zen website:
+
+https://mapzen.com/data/metro-extracts/metro/warsaw_poland/
+
+The area is that of the city of Warsaw, Poland. I chose this file, as I studied in Warsaw for several years, and I know it rather well.

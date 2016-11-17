@@ -159,7 +159,30 @@ In spite of all my pains, the output is still not displaying unicode characters.
 And indicates, that each of the problematic names occurs only once in the entire map. As the above names do not denote street names, but entire addresses, they can be removed from the map.
 
 
-## Numerous cities
+## Postal codes
+
+Postal codes in Mazovian district, in which Warsaw is located, begin with 0. As I noticed, that some of the numbers in abbreviated files deviate from this pattern, I decided to run a script finding the deviant postal codes:
+
+```python
+import csv
+
+with open('ways_tags.csv') as f:
+    reader = csv.DictReader(f)
+    deviant_codes = set()
+    for row in reader:
+        code = row['value']
+        if row['key'] == 'postcode' and int(code[0]) != 0:
+            deviant_codes.add(code)
+    print deviant_codes
+```
+
+The code outputs the following set:
+
+```python
+set(['96-314', '96-315', '96-316', '96-300', '91-065', '26-914', '96-313', '96-102', '96-515', '96-516', '96-111', '96-321', '96-320', '96-330', '96-325', '96-323'])
+```
+
+After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district, and should be corrected.
 
 ## Non-Latin characters in the map
 

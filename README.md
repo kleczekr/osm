@@ -505,6 +505,104 @@ The most common non-Latin script names are Russian names of streets and places (
 
 ## Phase 3: Further exploration of the dataset
 
+### Most common postcodes
+
+```SQL
+SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'postcode' GROUP BY value ORDER BY n DESC LIMIT 3;
+```
+
+```SQL
+05-825|10037
+05-400|8803
+05-303|7690
+```
+
+### Most common amenities
+
+```SQL
+SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'amenity' GROUP BY value ORDER BY n DESC LIMIT 4;
+```
+
+```SQL
+bench|1642
+restaurant|1232
+waste_basket|1030
+atm|992
+```
+
+It seems, that Mazovian district can boast of as many benches as restaurants!
+
+### Places for sport
+
+```SQL
+SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'sport' GROUP BY value ORDER BY n DESC;
+```
+
+```SQL
+swimming|23
+table_tennis|19
+gymnastics|11
+tennis|11
+multi|9
+skateboard|9
+equestrian|8
+basketball|7
+soccer|7
+chess|4
+fitness|4
+10pin|3
+canoe|2
+climbing|2
+wakeboard|2
+9pin|1
+Siłownia|1
+billard|1
+bowling|1
+bungee|1
+dance|1
+diving;scubadiving|1
+fighting|1
+gymnastics;martial_arts|1
+judo|1
+model_aerodrome|1
+paintball|1
+rc_plane|1
+sailing|1
+scuba_diving|1
+shooting|1
+ski|1
+skiing|1
+surfing|1
+volleyball|1
+```
+
+### Tourist amenities:
+
+```SQL
+SELECT value, COUNT(*) AS n FROM nodes_tags  WHERE key = 'tourism' GROUP BY value ORDER BY n DESC;
+```
+
+```SQL
+information|282
+artwork|153
+hotel|119
+attraction|107
+museum|80
+viewpoint|50
+picnic_site|46
+hostel|38
+chalet|35
+guest_house|26
+motel|12
+camp_site|6
+apartment|3
+caravan_site|2
+gallery|2
+meeting_point|1
+office|1
+zoo|1
+```
+
 
 ### Sources used in this project
 - [StackOverflow post on converting Unicode](http://stackoverflow.com/questions/13485546/converting-unicode-to-in-python)

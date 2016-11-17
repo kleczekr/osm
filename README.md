@@ -41,24 +41,26 @@ SELECT COUNT(DISTINCT(uid)) FROM nodes;
 SELECT COUNT(DISTINCT(uid)) FROM ways;
 ```
 1772
+
 ```SQL
-SELECT COUNT(DISTINCT(e.uid))
-FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM WAYS) e;
+SELECT COUNT(DISTINCT(new.uid))
+FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) AS new;
 ```
-(The above code was taken from the 'sample submission' file, linked to in the Udacity material)
+
+(The above code is basically identical with the one employed in the 'sample submission' file, linked to in the Udacity material. I tried to write different SQL queries, employing the JOIN command, but I came to the conclusion (after several code crashes) that UNION ALL, as explained [e.g. here,](https://www.techonthenet.com/sqlite/union_all.php) is necessary.)
 
 2622
 
 ### 20 major contributors:
 
 ```SQL
-SELECT e.user, COUNT(*) as num
-FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
-GROUP BY e.user
-ORDER BY num DESC
+SELECT new.user, COUNT(*) AS n
+FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) AS new
+GROUP BY new.user
+ORDER BY n DESC
 LIMIT 20;
 ```
-(The above code was taken from the 'sample submission' file, linked to in the Udacity material)
+(The above code is, again, not much different from the code given in 'sample submission' file, linked to in the Udacity material. As mentioned above, the UNION ALL operator seems to be necessary, and using it, it is difficult to write the query in radically different manner)
 
 ```SQL
 rosomak|1221345

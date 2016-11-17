@@ -68,6 +68,35 @@ CREATE TABLE simc (
 
 I used the [data wrangling schema](https://gist.github.com/swwelch/f1144229848b407e0a5d13fcb7fbbd6f) provided by Udacity team to import into SQL the other .csv files.
 
+After importing all the files to a single database, I performed the following query to see if the SIMC numbers from the government file match the ones in the OSM:
+
+```SQL
+SELECT DISTINCT simc.sym, simc.name, number.value, name.value
+FROM simc JOIN (ways_tags number JOIN ways_tags name ON number.id = name.id)
+ON simc.sym = number.value
+WHERE number.key = 'city:simc'
+AND name.key = 'city';
+```
+
+As the output of the above is too long to check it manually, I ran it again, to output only lines where the name from the first file was different from the name from the second file:
+
+```SQL
+SELECT DISTINCT simc.sym, simc.name, number.value, name.value
+FROM simc JOIN (ways_tags number JOIN ways_tags name ON number.id = name.id)
+ON simc.sym = number.value
+WHERE number.key = 'city:simc'
+AND name.key = 'city'
+AND simc.name != name.value;
+```
+
+This output only one line:
+
+```SQL
+921728|Wesoła|0921728|Warszawa
+```
+
+As indicated by the [Wikipedia page devoted to 'Wesoła'](https://en.wikipedia.org/wiki/Wesoła), the place is now considered to be part of Warsaw, but was an independent town prior to 2002. This clarifies, why the government file lists the SIMC number of Wesoła as referring to Warsaw, while the OSM map lists it as an independent entity.
+
 ## Street names
 
 As I explored street names, I was quite surprised to find no major mistakes or abbreviations. It might have been caused by the convention used in Polish edition of the OSM, where there is no equivalent of the 'Street' noun used by the street names (in Polish, it is put before the name of the street, and conventionally abbreviated to 'Ul.'). In some names, there is the abbreviation 'im.' from the word 'imienia' ('named after'), but I chose not to alter it, as it is used consistently.

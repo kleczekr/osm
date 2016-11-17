@@ -47,7 +47,7 @@ SELECT COUNT(DISTINCT(new.uid))
 FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) AS new;
 ```
 
-(The above code is basically identical with the one employed in the 'sample submission' file, linked to in the Udacity material. I tried to write different SQL queries, employing the JOIN command, but I came to the conclusion (after several code crashes) that UNION ALL, as explained [e.g. here,](https://www.techonthenet.com/sqlite/union_all.php) is necessary.)
+(The above code is, in its structure, not different from the one employed in the 'sample submission' file, linked to in the Udacity material. I tried to write different SQL queries, employing the JOIN command, but I came to the conclusion (after several code crashes) that UNION ALL, as explained [e.g. here,](https://www.techonthenet.com/sqlite/union_all.php) is necessary.)
 
 2622
 

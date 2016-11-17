@@ -212,3 +212,5 @@ def only_roman_chars(unistr):
 - [SQLite documentation on importing CSV files](https://www.sqlite.org/cvstrac/wiki?p=ImportingFiles)
 - [ElementTree documentation](https://docs.python.org/2/library/xml.etree.elementtree.html)
 - [Python CSV module documentation](https://docs.python.org/2/library/csv.html)
+- [Wikipedia article on postal codes in Poland](https://en.wikipedia.org/wiki/Postal_codes_in_Poland)
+- [Online search engine for postal codes in Poland](http://kody.jzk.pl/)

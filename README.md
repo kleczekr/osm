@@ -196,9 +196,9 @@ As I was not acquainted with it (it was different from postcode, as you can se a
 import csv
 import xml.etree.cElementTree as ET
 import codecs
-import sys    # sys.setdefaultencoding is cancelled by site.py
-reload(sys)    # to re-enable sys.setdefaultencoding()
-sys.setdefaultencoding('utf-8')
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8') # The three above lines are included to properly display Unicode chars
 
 outputs = 'simc.csv'
 
@@ -291,8 +291,8 @@ The function prints values containing number in them. Majority of the values are
 # -*- coding: utf-8 -*-
 import csv
 
-import sys    # sys.setdefaultencoding is cancelled by site.py
-reload(sys)    # to re-enable sys.setdefaultencoding()
+import sys
+reload(sys)
 sys.setdefaultencoding('utf-8')
 
 strange_names = [unicode('Powstańców Warszawy 19', 'utf-8').encode('utf-8'), unicode('Powstańców Warszawy 17', 'utf-8').encode('utf-8'), unicode('Karczewska 14/16', 'utf-8').encode('utf-8'), unicode('Ireny Kosmowskiej - Grodzieńska 21/29', 'utf-8').encode('utf-8')]
@@ -627,6 +627,33 @@ billboard|7
 column|3
 ```
 
+### Sources
+
+```SQL
+SELECT value, COUNT(*) AS n FROM ways_tags WHERE key = 'addr' GROUP BY value ORDER BY n DESC LIMIT 5;
+```
+
+```SQL
+mapa.um.warszawa.pl|51143
+piaseczno.e-mapa.net|6374
+grodziskmazowiecki.e-mapa.net|4191
+michalowice.e-mapa.net|4017
+lomianki.e-mapa.net|3789
+```
+
+```SQL
+SELECT value, COUNT(*) AS n FROM ways_tags WHERE key = 'source' GROUP BY value ORDER BY n DESC LIMIT 5;
+```
+
+```SQL
+UMiG Piaseczno|5653
+Bing|5179
+UM Ząbki|3392
+UG Izabelin|2164
+UG Lesznowola i bing|1920
+```
+
+
 ## Phase 4: Ideas for further work
 
 I was greatly impressed with the map of Warsaw. It is obvious that the map was meticulously edited by hundreds of people, and I cannot pinpoint any blunders in it, other than the few issues I mentioned in the map cleaning phase. I undertook the work on the map of Warsaw and its surrounding towns after an unsuccessful attempt at working with the map of Chennai, India, which is another city in which I studies for a longer period of time. There is much qualitative difference between these two datasets. While it might be unjust to compare them, as Chennai is much larger city than Warsaw, the map of Warsaw seems like much more of an accomplished project, with its details carefully arranged.
@@ -635,7 +662,13 @@ With that in mind, I see a few areas in which the map could be further developed
 
 ## Conclusion
 
+The above is an attempt at wrangling the OSM of Warsaw and its surrounding towns. While the code included above was, with the exclusion of passages marked as taken from other sources, written by myself, I would not be able to find out the proper ways to implement it without the sources listed below. One of the most pertinent problems in the dataset was the struggle to properly display Unicode characters. I implemented some of the solutions mentioned in the StackOverflow posts (linked below), and experimented with them, until they worked. This might have caused the code to be much less readable, for which I am sorry.
 
+While I can think of further ways to analyze the data, I think these would demand skills in SQL (or Python) far exceeding mine. These ideas include:
+
+- finding parts of the districts (by postcode?) having the biggest number of amenities, e.g. hotels, churches, restaurants
+- assessing, how car-friendly or bike-friendly are certain areas, by counting the number of parking spots and bike lanes
+- assessing, which sources contributed to which parts of the map
 
 ### Sources used in this project
 - [StackOverflow post on converting Unicode](http://stackoverflow.com/questions/13485546/converting-unicode-to-in-python)
@@ -647,3 +680,4 @@ With that in mind, I see a few areas in which the map could be further developed
 - [Python CSV module documentation](https://docs.python.org/2/library/csv.html)
 - [Wikipedia article on postal codes in Poland](https://en.wikipedia.org/wiki/Postal_codes_in_Poland)
 - [Online search engine for postal codes in Poland](http://kody.jzk.pl/)
+- [The excellent sample project, linked up in the course pages, was my constant source of inspiration](https://gist.github.com/carlward/54ec1c91b62a5f911c42#file-sample_project-md)

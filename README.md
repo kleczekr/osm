@@ -16,6 +16,65 @@ Running the data.py function on the OSM file for Warsaw indicated the following 
 
 ## Phase 1: description of the dataset
 
+### Size of files containing data:
+
+The files used in the project have the following size:
+- warsaw.osm - 1,064,137,008 bytes
+- ways.csv - 5,093,324 bytes
+- ways_tags.csv - 62,672,605 bytes
+- ways_nodes.csv - 123,713,407 bytes
+- nodes.csv - 361,947,554 bytes
+- nodes_tags.csv - 91,153,340 bytes
+- SIMC.xml - 32,026,584 bytes
+- simc.csv - 2,850,601 bytes
+- mydb.db - 627,879,936 bytes
+
+### Number of unique users:
+
+```SQL
+SELECT COUNT(DISTINCT(uid)) FROM nodes;
+```
+2368
+```SQL
+SELECT COUNT(DISTINCT(uid)) FROM ways;
+```
+1772
+```SQL
+SELECT COUNT(DISTINCT(e.uid)) FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM WAYS) e;
+```
+(The above code was taken from the 'sample submission' file, linked to in the Udacity material)
+
+2622
+
+### 20 major contributors:
+
+```SQL
+SELECT e.user, COUNT(*) as num FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e GROUP BY e.user ORDER BY num DESC LIMIT 20;
+```
+(The above code was taken from the 'sample submission' file, linked to in the Udacity material)
+
+```SQL
+rosomak|1221345
+kocio|406644
+Zibi-importy|185345
+Madmaks|142099
+balrog-kun-imports|135851
+WiktorN-import|132798
+Alkomat|132080
+lasica1982|122819
+RuteX|110259
+Javnik|107865
+grracjan|104670
+NikodemKarolak|96113
+Andrzej3345|95485
+balrog-kun|83710
+masti|83574
+Voitcus|79706
+lemacik|70806
+wajak|68088
+michal_f|63063
+mpd_cbm|46048
+```
 
 ## Phase 2: auditing and cleaning the dataset
 
@@ -344,6 +403,9 @@ The above code might look a little strange, as I needed to use a workaround in o
 ```
 
 The most common non-Latin script names are Russian names of streets and places ('аллея Солидарности', 'улица Адама Мицкевича', 'Пляц Банковий', 'Висла'). There is also an Ukrainian name of a street ('Марії Склодовської-Кюрі вулиця') and, surprisingly, a Japanese name of the river Wisła ('ヴィスワ'). These could be changed to Polish names with relative ease, but care should be taken, in case these were included in the map for the convenience of foreign speakers.
+
+## Phase 3: Further exploration of the dataset
+
 
 ### Sources used in this project
 - [StackOverflow post on converting Unicode](http://stackoverflow.com/questions/13485546/converting-unicode-to-in-python)

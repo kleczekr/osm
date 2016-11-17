@@ -47,7 +47,7 @@ SELECT COUNT(DISTINCT(new.uid))
 FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) AS new;
 ```
 
-(The above code is, in its structure, not different from the one employed in the 'sample submission' file, linked to in the Udacity material. I tried to write different SQL queries, employing the JOIN command, but I came to the conclusion (after several code crashes) that UNION ALL, as explained [e.g. here,](https://www.techonthenet.com/sqlite/union_all.php) is necessary.)
+(The above code is, in its structure, not different from the one employed in the ['sample submission'](https://gist.github.com/carlward/54ec1c91b62a5f911c42#file-sample_project-md) file, linked to in the Udacity material. I tried to write different SQL queries, employing the JOIN command, but I came to the conclusion (after several code crashes) that UNION ALL, as explained [e.g. here,](https://www.techonthenet.com/sqlite/union_all.php) is necessary.)
 
 2622
 
@@ -60,7 +60,7 @@ GROUP BY new.user
 ORDER BY n DESC
 LIMIT 20;
 ```
-(The above code is, again, not much different from the code given in 'sample submission' file, linked to in the Udacity material. As mentioned above, the UNION ALL operator seems to be necessary, and using it, it is difficult to write the query in radically different manner)
+(The above code is, again, not much different from the code given in the ['sample submission'](https://gist.github.com/carlward/54ec1c91b62a5f911c42#file-sample_project-md) file, linked to in the Udacity material. As mentioned above, the UNION ALL operator seems to be necessary, and using it, it is difficult to write the query in radically different manner)
 
 ```SQL
 rosomak|1221345

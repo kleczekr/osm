@@ -677,6 +677,7 @@ While I can think of further ways to analyze the data, I think these would deman
 - [StackOverflow post on converting XML to CSV](http://stackoverflow.com/questions/31844713/python-convert-xml-to-csv-file)
 - [StackOverflow post on checking a string for non-Latin characters](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters)
 - [StackOverflow AlKid's solution to the function finding numbers in strings](http://stackoverflow.com/questions/19859282/check-if-a-string-contains-a-number)
+- [StackOverflow post on changing tag attributes](http://stackoverflow.com/questions/17922056/setting-an-attribute-value-in-xml-file-using-elementtree)
 - [SQLite documentation on importing CSV files](https://www.sqlite.org/cvstrac/wiki?p=ImportingFiles)
 - [ElementTree documentation](https://docs.python.org/2/library/xml.etree.elementtree.html)
 - [Python CSV module documentation](https://docs.python.org/2/library/csv.html)

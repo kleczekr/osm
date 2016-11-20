@@ -51,7 +51,7 @@ FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) AS new;
 
 2622
 
-### 20 major contributors:
+### Major contributors:
 
 ```SQL
 SELECT new.user, COUNT(*) AS n
@@ -121,7 +121,7 @@ postcode|118218
 ### Number of cafes, cinemas, and bars
 
 ```SQL
-sqlite> SELECT value, COUNT(*) AS n
+SELECT value, COUNT(*) AS n
 FROM nodes_tags
 WHERE value = 'cafe'
 GROUP BY value; 
@@ -129,7 +129,7 @@ GROUP BY value;
 487
 
 ```SQL
-sqlite> SELECT value, COUNT(*) AS n
+SELECT value, COUNT(*) AS n
 FROM nodes_tags
 WHERE value = 'cinema'
 GROUP BY value;
@@ -137,7 +137,7 @@ GROUP BY value;
 36
 
 ```SQL
-sqlite> SELECT value, COUNT(*) AS n
+SELECT value, COUNT(*) AS n
 FROM nodes_tags
 WHERE value = 'bar'
 GROUP BY value;
@@ -309,10 +309,10 @@ set(['96-314', '96-315', '96-316', '96-300', '91-065', '26-914',
 '96-320', '96-330', '96-325', '96-323'])
 ```
 
-After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district. As the value should, most likely, be corrected, we need to learn more about this object. The following query displays all the objects having the same ID as the mysterious postcode:
+After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district. As the value should, most likely, be corrected, I had to learn more about this object. The following query displays all the objects having the same ID as the mysterious postcode:
 
 ```SQL
-sqlite> SELECT id, key, value
+SELECT id, key, value
 FROM ways_tags
 WHERE id = (SELECT DISTINCT id
 FROM ways_tags

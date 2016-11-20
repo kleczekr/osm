@@ -374,10 +374,24 @@ The output is a single object:
 31102991|postcode|91-065
 ```
 
-The object is 'Kaponiera Pierwszego Bastionu', located in Cytadela Warszawska, and the proper postcode for it is 01-532. Writing a script editing and saving the XML file might seem futile when it is a single value that needs changing, and I chose to overwrite the value in the CSV file ways_tags.csv. The following script overwrites the value:
+The object is 'Kaponiera Pierwszego Bastionu', located in Cytadela Warszawska, and the proper postcode for it is 01-532. Writing a script editing and saving the XML file might seem futile when it is a single value that needs changing, and I chose to overwrite the value in the CSV file ways_tags.csv. The following script overwrites the value (it is a slightly edited version of the code provided in [this StackOverflow post](http://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python):
 
 ```python
+import csv
+r = csv.reader(open('ways_tags.csv'))
 
+lines = [l for l in r]
+lines_count = -1
+for line in lines:
+    lines_count += 1
+    fields_count = -1
+    for field in line:
+        fields_count += 1
+        if field == '91-065':
+            lines[lines_count][fields_count] = '01-532'
+
+writer = csv.writer(open('ways_tags_corrected.csv', 'w'))
+writer.writerows(lines)
 ```
 
 ### Non-Latin characters in the map
@@ -617,6 +631,7 @@ While I can think of further ways to analyze the data, I think these would deman
 - [StackOverflow post on checking a string for non-Latin characters](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters)
 - [StackOverflow AlKid's solution to the function finding numbers in strings](http://stackoverflow.com/questions/19859282/check-if-a-string-contains-a-number)
 - [StackOverflow post on changing tag attributes](http://stackoverflow.com/questions/17922056/setting-an-attribute-value-in-xml-file-using-elementtree)
+- [StackOverflow post on editing a single field from a CSV file](http://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python)
 - [SQLite documentation on importing CSV files](https://www.sqlite.org/cvstrac/wiki?p=ImportingFiles)
 - [ElementTree documentation](https://docs.python.org/2/library/xml.etree.elementtree.html)
 - [Python CSV module documentation](https://docs.python.org/2/library/csv.html)

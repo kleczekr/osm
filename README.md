@@ -328,7 +328,7 @@ The output is a single object:
 31102991|postcode|91-065
 ```
 
-The object is 'Kaponiera Pierwszego Bastionu', located in Cytadela Warszawska, and the proper postcode for it is 01-532. Writing a script editing and saving the XML file might seem futile when it is a single value that needs changing, and I chose to overwrite the value in the CSV file ways_tags.csv. The following script overwrites the value (it is a slightly edited version of the code provided in [this StackOverflow post](http://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python):
+The object is 'Kaponiera Pierwszego Bastionu', located in Cytadela Warszawska, and the proper postcode for it is 01-532. Writing a script editing and saving the XML file might seem futile when it is a single value that needs changing, and I chose to overwrite the value in the CSV file ways_tags.csv. The following script overwrites the value (it is a slightly edited version of the code provided in [this StackOverflow post](http://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python)):
 
 ```python
 import csv

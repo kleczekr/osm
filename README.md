@@ -350,7 +350,9 @@ with open('ways_tags.csv') as f:
 The code outputs the following set:
 
 ```python
-set(['96-314', '96-315', '96-316', '96-300', '91-065', '26-914', '96-313', '96-102', '96-515', '96-516', '96-111', '96-321', '96-320', '96-330', '96-325', '96-323'])
+set(['96-314', '96-315', '96-316', '96-300', '91-065', '26-914',
+'96-313', '96-102', '96-515', '96-516', '96-111', '96-321',
+'96-320', '96-330', '96-325', '96-323'])
 ```
 
 After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district.
@@ -431,7 +433,12 @@ The most common non-Latin script names are Russian names of streets and places (
 ### Most common postcodes
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'postcode' GROUP BY value ORDER BY n DESC LIMIT 3;
+SELECT value, COUNT(*) AS n
+FROM nodes_tags
+WHERE key = 'postcode'
+GROUP BY value
+ORDER BY n
+DESC LIMIT 3;
 ```
 
 ```SQL
@@ -443,7 +450,12 @@ SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'postcode' GROUP BY valu
 ### Most common amenities
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'amenity' GROUP BY value ORDER BY n DESC LIMIT 4;
+SELECT value, COUNT(*) AS n
+FROM nodes_tags
+WHERE key = 'amenity'
+GROUP BY value
+ORDER BY n DESC
+LIMIT 4;
 ```
 
 ```SQL
@@ -458,7 +470,12 @@ It seems, that Mazovian district can boast of as many benches as restaurants!
 ### Places for sport
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'sport' GROUP BY value ORDER BY n DESC LIMIT 5;
+SELECT value, COUNT(*) AS n
+FROM nodes_tags
+WHERE key = 'sport'
+GROUP BY value
+ORDER BY n DESC
+LIMIT 5;
 ```
 
 ```SQL
@@ -472,7 +489,12 @@ multi|9
 ### Tourist amenities:
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM nodes_tags  WHERE key = 'tourism' GROUP BY value ORDER BY n DESC LIMIT 5;
+SELECT value, COUNT(*) AS n
+FROM nodes_tags
+WHERE key = 'tourism'
+GROUP BY value
+ORDER BY n DESC
+LIMIT 5;
 ```
 
 ```SQL
@@ -486,7 +508,11 @@ museum|80
 ### Architecture
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM ways_tags WHERE key = 'architecture' GROUP BY value ORDER BY n DESC;
+SELECT value, COUNT(*) AS n
+FROM ways_tags
+WHERE key = 'architecture'
+GROUP BY value
+ORDER BY n DESC;
 ```
 
 ```SQL
@@ -497,7 +523,11 @@ classic|1
 ### Advertising
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM ways_tags WHERE key = 'advertising' GROUP BY value ORDER BY n DESC;
+SELECT value, COUNT(*) AS n
+FROM ways_tags
+WHERE key = 'advertising'
+GROUP BY value
+ORDER BY n DESC;
 ```
 
 ```SQL
@@ -508,7 +538,12 @@ column|3
 ### Sources
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM ways_tags WHERE key = 'addr' GROUP BY value ORDER BY n DESC LIMIT 5;
+SELECT value, COUNT(*) AS n
+FROM ways_tags
+WHERE key = 'addr'
+GROUP BY value
+ORDER BY n DESC
+LIMIT 5;
 ```
 
 ```SQL
@@ -520,7 +555,12 @@ lomianki.e-mapa.net|3789
 ```
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM ways_tags WHERE key = 'source' GROUP BY value ORDER BY n DESC LIMIT 5;
+SELECT value, COUNT(*) AS n
+FROM ways_tags
+WHERE key = 'source'
+GROUP BY value
+ORDER BY n DESC
+LIMIT 5;
 ```
 
 ```SQL

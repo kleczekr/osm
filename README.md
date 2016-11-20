@@ -58,7 +58,7 @@ SELECT new.user, COUNT(*) AS n
 FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) AS new
 GROUP BY new.user
 ORDER BY n DESC
-LIMIT 20;
+LIMIT 5;
 ```
 (The above code is, again, not much different from the code given in the ['sample submission'](https://gist.github.com/carlward/54ec1c91b62a5f911c42#file-sample_project-md) file, linked to in the Udacity material. As mentioned above, the UNION ALL operator seems to be necessary, and using it, it is difficult to write the query in radically different manner)
 
@@ -68,21 +68,6 @@ kocio|406644
 Zibi-importy|185345
 Madmaks|142099
 balrog-kun-imports|135851
-WiktorN-import|132798
-Alkomat|132080
-lasica1982|122819
-RuteX|110259
-Javnik|107865
-grracjan|104670
-NikodemKarolak|96113
-Andrzej3345|95485
-balrog-kun|83710
-masti|83574
-Voitcus|79706
-lemacik|70806
-wajak|68088
-michal_f|63063
-mpd_cbm|46048
 ```
 
 ### Number of nodes and ways
@@ -104,7 +89,7 @@ SELECT key, COUNT(*) AS n
 FROM nodes_tags
 GROUP BY key
 ORDER BY n DESC
-LIMIT 20;
+LIMIT 6;
 ```
 
 ```SQL
@@ -114,20 +99,6 @@ city|335089
 postcode|334573
 addr|256926
 city:simc|184749
-source|171247
-street:sym_ul|134332
-place|69748
-highway|31554
-name|27763
-ref|14469
-amenity|14106
-barrier|11497
-natural|11399
-power|9917
-type|8201
-emergency|8016
-created_by|7621
-public_transport|7401
 ```
 
 ```SQL
@@ -135,7 +106,7 @@ SELECT key, COUNT(*) AS n
 FROM ways_tags
 GROUP BY key
 ORDER BY n DESC
-LIMIT 20;
+LIMIT 6;
 ```
 
 ```SQL
@@ -145,20 +116,6 @@ housenumber|125745
 city|124428
 street|123576
 postcode|118218
-addr|104185
-city:simc|90981
-street:sym_ul|87576
-name|65416
-landuse|47407
-source|40051
-surface|36187
-maxspeed|23776
-oneway|21533
-lanes|16069
-service|14573
-barrier|13549
-ref|12865
-amenity|12129
 ```
 
 ### Number of cafes, cinemas, and bars
@@ -398,56 +355,7 @@ As the output indicates, majority of the fields writen in non-Latin scripts are 
 Міст Понятовського
 Варшавская школа экономики
 Посольство України
-ארקדיה
-Варшавський фінансовий центр
-Заходні Буг
-Пляц Банковий
-Варшавська політехніка
-Колонна короля Сигизмунда в Варшаве
-جامعة وارسو
-주 폴란드 대한민국 대사관
-11-го Листопада
-Повонзківський цвинтар
-Посольство России в Польше
-Марії Склодовської-Кюрі вулиця
-Висла
-Музей охоты и верховой езды
-Статуя Сиренки
-Варшавский университет
-Бельведерский дворец в Варшаве
-Посольство Республики Узбекистан
-Юля 8560
-Новогеоргиевская крепость
-Церковь Успения Божией Матери и Святого Иосифа
-аллея Солидарности
-памятник Яну Килиницкому
-Костел святого Мартина
-Франкліна Рузвельта
-קניון עודפים( אוטובוס 517 מתחנה מרכזית )
-стоянка
-улица Адама Мицкевича
-ポーランド日本情報工科大学
-ночлег
-Международный Аэропорт имени Фредерика Шопена
-워크리브트레블 민박
-Алея «Солідарності»
-Дорина
-Тадеуша Сиґетинського
-Центральный Железнодорожный Вокзал
-在ポーランド日本国大使館
-Західний Буг
-Центральний статистичний офіс Польщі
-Западный Буг
-Варшавский политехнический институт
-Нараў
-розборка пежо
-Палац Красінських
-Вісла
-Кафедральний собор Івана Хрестителя
-Європейська площа
-Варшавське наукове товариство
-Варшава АС Восточная
-Буг
+(...)
 Піонерська вулиця
 נמל התעופה ורשה פרדריק שופן
 부크
@@ -539,7 +447,7 @@ It seems, that Mazovian district can boast of as many benches as restaurants!
 ### Places for sport
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'sport' GROUP BY value ORDER BY n DESC;
+SELECT value, COUNT(*) AS n FROM nodes_tags WHERE key = 'sport' GROUP BY value ORDER BY n DESC LIMIT 5;
 ```
 
 ```SQL
@@ -548,42 +456,12 @@ table_tennis|19
 gymnastics|11
 tennis|11
 multi|9
-skateboard|9
-equestrian|8
-basketball|7
-soccer|7
-chess|4
-fitness|4
-10pin|3
-canoe|2
-climbing|2
-wakeboard|2
-9pin|1
-Siłownia|1
-billard|1
-bowling|1
-bungee|1
-dance|1
-diving;scubadiving|1
-fighting|1
-gymnastics;martial_arts|1
-judo|1
-model_aerodrome|1
-paintball|1
-rc_plane|1
-sailing|1
-scuba_diving|1
-shooting|1
-ski|1
-skiing|1
-surfing|1
-volleyball|1
 ```
 
 ### Tourist amenities:
 
 ```SQL
-SELECT value, COUNT(*) AS n FROM nodes_tags  WHERE key = 'tourism' GROUP BY value ORDER BY n DESC;
+SELECT value, COUNT(*) AS n FROM nodes_tags  WHERE key = 'tourism' GROUP BY value ORDER BY n DESC LIMIT 5;
 ```
 
 ```SQL
@@ -592,19 +470,6 @@ artwork|153
 hotel|119
 attraction|107
 museum|80
-viewpoint|50
-picnic_site|46
-hostel|38
-chalet|35
-guest_house|26
-motel|12
-camp_site|6
-apartment|3
-caravan_site|2
-gallery|2
-meeting_point|1
-office|1
-zoo|1
 ```
 
 ### Architecture

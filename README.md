@@ -121,22 +121,35 @@ postcode|118218
 ### Number of cafes, cinemas, and bars
 
 ```SQL
-sqlite> SELECT value, COUNT(*) AS n FROM nodes_tags WHERE value = 'cafe' GROUP BY value; 
+sqlite> SELECT value, COUNT(*) AS n
+FROM nodes_tags
+WHERE value = 'cafe'
+GROUP BY value; 
 ```
 487
 
 ```SQL
-sqlite> SELECT value, COUNT(*) AS n FROM nodes_tags WHERE value = 'cinema' GROUP BY value;
+sqlite> SELECT value, COUNT(*) AS n
+FROM nodes_tags
+WHERE value = 'cinema'
+GROUP BY value;
 ```
 36
 
 ```SQL
-sqlite> SELECT value, COUNT(*) AS n FROM nodes_tags WHERE value = 'bar' GROUP BY value;
+sqlite> SELECT value, COUNT(*) AS n
+FROM nodes_tags
+WHERE value = 'bar'
+GROUP BY value;
 ```
 138
 
 
 ## Phase 2: auditing and cleaning the dataset
+
+### Creating a database
+
+While it might be somewhat counterintuitive to create a database before cleaning the data, I had to do so in order to perform SQL queries on it. For this purpose, I adapted solution [proposed on the forum by Myles](https://discussions.udacity.com/t/creating-db-file-from-csv-files-with-non-ascii-unicode-characters/174958/7) for creating a database for XML having Unicode signs. The code for importing the CSV to a database is available [here](https://github.com/kleczekr/osm/blob/master/python_files/database.py).
 
 ### The SIMC number
 
@@ -149,38 +162,7 @@ After running the data.py function on the XML file and taking a look at the outp
 <tag k="addr:postcode" v="05-075" />
 <tag k="addr:city:simc" v="0921728" />
 ```
-As I was not acquainted with it (it was different from postcode, as you can se above), I found out it refers to territorial classification of Poland, TERYT. The government statistical portal of Poland contained [an XML file](http://www.stat.gov.pl/broker/access/prefile/listPreFiles.jspa) of all SIMC numbers of Polish cities. In an attempt at corroborating, and possibly correcting, the SIMC numbers in OSM, I wrote the following function, converting the SIMC XML to CSV:
-
-```python
-import csv
-import xml.etree.cElementTree as ET
-import codecs
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8') # The three above lines are included to properly display Unicode chars
-
-outputs = 'simc.csv'
-
-tree = ET.parse('SIMC.xml')
-root = tree.getroot()
-
-SIMC_FIELDS = ['name', 'sym', 'sympod']
-
-with codecs.open(outputs, 'w') as f:
-    writer = csv.writer(f)
-    writer.writerow(SIMC_FIELDS)
-    for child in root:
-        for stuff in child:
-            for element in stuff:
-                if element.attrib['name'] == 'NAZWA':
-                    name = element.text
-                elif element.attrib['name'] == 'SYM':
-                    sym = element.text
-                elif element.attrib['name'] == 'SYMPOD':
-                    sympod = element.text
-            writer.writerow((name, sym, sympod))
-```
-This outputs a 'simc.csv' file, which I then imported into SQL with this adapted call:
+As I was not acquainted with it (it was different from postcode, as you can se above), I found out it refers to territorial classification of Poland, TERYT. The government statistical portal of Poland contained [an XML file](http://www.stat.gov.pl/broker/access/prefile/listPreFiles.jspa) of all SIMC numbers of Polish cities. In an attempt at corroborating, and possibly correcting, the SIMC numbers in OSM, I wrote the function [simc_converter](https://github.com/kleczekr/osm/blob/master/python_files/simc_converter.py), which converts chosen fields from the XML file to a CSV document. The code outputs a 'simc.csv' file, which I then imported into SQL with this adapted call:
 
 ```SQL
 CREATE TABLE simc (
@@ -225,7 +207,7 @@ As indicated by the [Wikipedia page devoted to 'Wesoła'](https://en.wikipedia.o
 
 As I explored street names, I was quite surprised to find no major mistakes or abbreviations. It might have been caused by the convention used in Polish edition of the OSM, where there is no equivalent of the 'Street' noun used by the street names (in Polish, it is put before the name of the street, and conventionally abbreviated to 'Ul.'). In some names, there is the abbreviation 'im.' from the word 'imienia' ('named after'), but I chose not to alter it, as it is used consistently.
 
-I did notice, though, that some streets have numbers in them. I ran a Python script on the ways_tags.csv to output all the street names containing numbers:
+I did notice, though, that some streets have numbers in them. I ran a Python script on the ways_tags.csv to output all the street names containing numbers ([the code is also available here](https://github.com/kleczekr/osm/blob/master/python_files/numbers.py)):
 
 ```python
 import csv
@@ -268,12 +250,12 @@ with open('ways_tags.csv') as f:
         name = row['value']
         if row['key'] == 'street' and name in strange_names:
             strange_names_dict[name] += 1
-
+    # The loop below is included to display Unicode characters properly
     for key in strange_names_dict.keys():
         print key + ': ' + str(strange_names_dict[key])
 ```
 
-The loop at the end is included in order to display the Unicode characters properly. The output is as follows:
+The output of this code is as follows:
 
 ```python
 Powstańców Warszawy 17: 1
@@ -282,8 +264,71 @@ Ireny Kosmowskiej - Grodzieńska 21/29: 1
 Powstańców Warszawy 19: 1
 ```
 
-And indicates, that each of the problematic names occurs only once in the entire map. As the above names do not denote street names, but entire addresses, they can be removed from the map.
+And indicates, that each of the problematic names occurs only once in the entire map. As the above names do not denote street names, but entire addresses, they should be corrected. Below is the script I used to correct the mentioned entries in the XML file of the map (the code is also available [here](https://github.com/kleczekr/osm/blob/master/python_files/numbers_change_fixed_finally.py)). As I mention in a comment in the code, it is a slightly adapted code provided [by Myles in the forum thread](https://discussions.udacity.com/t/changing-attribute-value-in-xml/44575/3):
 
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import xml.etree.cElementTree as ET
+import codecs
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+'''
+I decided to use a rather primitive mapping method -- it takes an entire street name,
+and corrects it into a correct name. This solution was motivated by the fact, that there was
+very few names in the set which demanded correction, and this solution was the most
+efficient.
+'''
+
+mapping = {
+    'Zadumana 1A': 'Zadumana',
+    'Belwederska 20/22': 'Belwederska',
+    'Nowy Drzewicz 62': 'Nowy Drzewicz',
+    'Sokołowska 9/U31': 'Sokołowska',
+    'Nowoursynowska 154A': 'Nowoursynowska',
+    'Wiejska 1': 'Wiejska',
+    'Powstańców Warszawy 19': 'Powstańców Warszawy',
+    'Powstańców Warszawy 17': 'Powstańców Warszawy',
+    'Karczewska 14/16': 'Karczewska',
+    'Postępu 14': 'Postępu',
+    'Ireny Kosmowskiej - Grodzieńska 21/29': 'Ireny Kosmowskiej - Grodzieńska'
+}
+
+def is_street_name(elem):
+    return (elem.attrib['k'] == "addr:street")
+
+'''
+The following function is a slightly modified version of the one written by
+Myles: https://discussions.udacity.com/t/changing-attribute-value-in-xml/44575/3
+'''
+
+def modify_xml(new_file):
+    outfile = codecs.open(new_file, 'w')
+    # outfile.write('<?xml version="1.0" encoding="UTF-8"?>')
+    for event, elem in ET.iterparse(old_file, events=("start", "end")):
+        if elem.tag == "node" or elem.tag == "way":
+            for tag in elem.iter("tag"):
+                if is_street_name(tag):
+                    tagtext = tag.attrib['v'].encode('utf-8')
+                    if tagtext in mapping.keys():
+                        print tagtext, '==>'
+                        tag.set('v', mapping[tagtext])
+                        print tag.attrib['v']
+    outfile.write(ET.tostring(elem, encoding='UTF-8'))
+    outfile.close()
+
+'''
+The program takes awfully long to run (on my computer, it munched the file
+for over half an hour), but seems to work fine
+'''
+old_file = 'w.osm'
+new_file = 'new_w.osm'
+modify_xml(new_file)
+```
+
+After running the code, I ran a simple script checking, if there are any names left from the group that was meant to be corrected. The script is available [here](https://github.com/kleczekr/osm/blob/master/python_files/reality_check.py), and returned no output---the script changing street names was successful.
 
 ### Postal codes
 
@@ -308,46 +353,11 @@ The code outputs the following set:
 set(['96-314', '96-315', '96-316', '96-300', '91-065', '26-914', '96-313', '96-102', '96-515', '96-516', '96-111', '96-321', '96-320', '96-330', '96-325', '96-323'])
 ```
 
-After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district, and should be corrected.
+After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district.
 
 ### Non-Latin characters in the map
 
-As I mentioned, I discovered, that there are fields in the data containing non-Latin characters, predominantly Russian. As I have been looking for ways of finding these fields, I came upon a [StackOverflow post](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters) containing code for checking string for non-Latin characters. Below is the code I adapted for checking the map data:
-
-```python
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import unicodedata as ud
-import csv
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
-latin_letters= {}
-
-def is_latin(uchr):
-    try: return latin_letters[uchr]
-    except KeyError:
-         return latin_letters.setdefault(uchr, 'LATIN' in ud.name(uchr))
-
-def only_roman_chars(unistr):
-    return all(is_latin(uchr)
-           for uchr in unistr
-           if uchr.isalpha())
-
-with open('ways_tags.csv') as f:
-    reader = csv.DictReader(f)
-    not_romans = set()
-    count = 0
-    for row in reader:
-        for field in row.values():
-            if not only_roman_chars(unicode(field, 'utf-8')):
-                not_romans.add(field)
-    for stuff in not_romans:
-        print unicode(stuff, 'utf-8')
-```
-
-As the output indicates, majority of the fields writen in non-Latin scripts are written in either Russian, or Ukrainian:
+As I mentioned, I discovered, that there are fields in the data containing non-Latin characters, predominantly Russian. As I have been looking for ways of finding these fields, I came upon a [StackOverflow post](http://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters) containing code for checking string for non-Latin characters. After running the script, I received the following output:
 
 ```python
 ヴィスワ
@@ -360,7 +370,7 @@ As the output indicates, majority of the fields writen in non-Latin scripts are 
 נמל התעופה ורשה פרדריק שופן
 부크
 ```
-This might not be a problem, since the list is not very long. We can take a look at how often these names are used. The following prints the names which occur more than five times:
+As the output indicates, majority of the fields writen in non-Latin scripts are written in either Russian, or Ukrainian. This might not be a problem, since the list is not very long. We can take a look at how often these names are used. The following prints the names which occur more than five times (the code is also available [here](https://github.com/kleczekr/osm/blob/master/python_files/roman.py)):
 
 ```python
 #!/usr/bin/env python
@@ -397,12 +407,13 @@ with open('ways_tags.csv') as f:
                     not_romans[field] += 1
                 else:
                     not_romans[field] = 1
+    # The loop below is included in order to display Unicode characters properly
     for item in not_romans.keys():
         if not_romans[item] > 5:
             print item + ': ' + str(not_romans[item])
 ```
 
-The above code might look a little strange, as I needed to use a workaround in order to display unicode strings properly. The output is as follows:
+The output is as follows:
 
 ```python
 ヴィスワ: 9

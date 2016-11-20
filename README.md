@@ -355,7 +355,30 @@ set(['96-314', '96-315', '96-316', '96-300', '91-065', '26-914',
 '96-320', '96-330', '96-325', '96-323'])
 ```
 
-After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district.
+After a while of searching for details online, I established, that postcodes beginning with '96' also belong to Masovian district. There are two other types of codes left in the set: '26-914' and '91-065'. The first one, '26-914', is also located in Masovian district. The second one, '91-065', is located in the neighbouring Lodz district. As the value should, most likely, be corrected, we need to learn more about this object. The following query displays all the objects having the same ID as the mysterious postcode:
+
+```SQL
+sqlite> SELECT id, key, value
+FROM ways_tags
+WHERE id = (SELECT DISTINCT id
+FROM ways_tags
+WHERE value = '91-065');
+```
+
+The output is a single object:
+
+```SQL
+31102991|name|Kaponiera Pierwszego Bastionu
+31102991|source|wikipedia
+31102991|building|yes
+31102991|postcode|91-065
+```
+
+The object is 'Kaponiera Pierwszego Bastionu', located in Cytadela Warszawska, and the proper postcode for it is 01-532. Writing a script editing and saving the XML file might seem futile when it is a single value that needs changing, and I chose to overwrite the value in the CSV file ways_tags.csv. The following script overwrites the value:
+
+```python
+
+```
 
 ### Non-Latin characters in the map
 
